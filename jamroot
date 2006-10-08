@@ -1,0 +1,10 @@
+
+project xor_encode
+    : requirements <warnings-as-errors>on
+                   <link>static
+                   <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+    ;
+
+exe xe : xe.c xor_encode.c ;
+
+install . : xe ;
