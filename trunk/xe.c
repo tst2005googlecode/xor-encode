@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int xor_encode(int key, FILE *in, FILE *out);
+extern int xor_encode(int key, FILE *in, FILE *out);
 
 
 int main(int argc, char *argv[])
