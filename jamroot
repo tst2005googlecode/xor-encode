@@ -5,6 +5,7 @@ project xor_encode
                    <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
     ;
 
-exe xe : xe.c xor_encode.c ;
+exe xe : xe.c xor_encode.c mtwist.c ;
 
 install . : xe ;
+install test : xe ;
