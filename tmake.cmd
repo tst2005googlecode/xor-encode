@@ -1,1 +1,0 @@
-call tcc -bench xe.c xor_encode.c mtwist.c
