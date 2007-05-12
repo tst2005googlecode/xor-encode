@@ -4,22 +4,20 @@
 #include <errno.h>
 
 
-/* from "mtwist.h" */
-extern void mt_seed32new(unsigned long);
-extern unsigned long mt_lrand(void);
+void init_genrand(unsigned long);
+unsigned long genrand_int32(void);
 
 
 typedef size_t fast_t;
 typedef unsigned char byte;
-#define BUFSIZE (2 << 14)    /* it must be exactly n*sizeof(fast_t) (here, 32768) */
+#define BUFSIZE 4096
 
 
 int xor_encode(int key, FILE *in, FILE *out)
 {
     size_t i, nread;
 
-    const size_t optcoef = sizeof(fast_t) / sizeof(byte);
-    const size_t n = BUFSIZE / optcoef;
+    const size_t n = BUFSIZE / sizeof(fast_t);
 
     byte inbuf[BUFSIZE], outbuf[BUFSIZE];
     fast_t *_inbuf = (fast_t *)inbuf;
@@ -28,17 +26,13 @@ int xor_encode(int key, FILE *in, FILE *out)
     assert(in != NULL);
     assert(out != NULL);
 
-    setbuf(in, NULL);
-    setbuf(out, NULL);
+    init_genrand(key);
 
-    mt_seed32new(key);
-
-    do
-    {
+    do {
         nread = fread(inbuf, sizeof(byte), BUFSIZE, in);
 
         for (i = 0; i < n; ++i)
-            _outbuf[i] = _inbuf[i] ^ mt_lrand();
+            _outbuf[i] = _inbuf[i] ^ genrand_int32();
 
         fwrite(outbuf, sizeof(byte), nread, out);
     }
@@ -52,3 +46,4 @@ int xor_encode(int key, FILE *in, FILE *out)
 
     return 1;
 }
+
